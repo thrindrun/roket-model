@@ -1,6 +1,6 @@
-clear all;
+clear;
 clc;
-close all;
+%close all;
 
 % **Sayısal değerler**
 m_val = 25.0;    
@@ -24,9 +24,9 @@ u_vec = [Fx; Fy; Fz; L; M; N];
 
 % **Güncellenmiş sistem denklemleri (yerçekimi ve sürtünme dahil)**
 f = [
-    (-g*cos(theta)*cos(psi))+(Fx/m)-0.016*(u^2 + v^2 + w^2) - q*w + r*v ;  %-0.016*(u^2 + v^2 + w^2) - q*w + r*v// (-g*cos(theta)*cos(psi))
-    -g*(sin(phi)*sin(theta)*cos(psi)-cos(phi)*sin(psi))+Fy/m - r*u + p*w-0.016*(u^2 + v^2 + w^2);
-    -g*(cos(phi)*sin(theta)*cos(psi)+sin(phi)*sin(psi))+Fz/m - p*v + q*u-0.016*(u^2 + v^2 + w^2);
+    (-g*cos(theta)*cos(psi))+(Fx/m)-0.016*u^2 - q*w + r*v ;  %-0.016*(u^2 + v^2 + w^2) - q*w + r*v// (-g*cos(theta)*cos(psi))
+    -g*(sin(phi)*sin(theta)*cos(psi)-cos(phi)*sin(psi))+Fy/m - r*u + p*w-0.016*v^2;
+    -g*(cos(phi)*sin(theta)*cos(psi)+sin(phi)*sin(psi))+Fz/m - p*v + q*u-0.016*w^2;
     (L - q*r*(Iz - Iy))/Ix; %- cp*p
     (M - r*p*(Ix - Iz))/Iy; % - cq*q
     (N - p*q*(Iy - Ix))/Iz; % - cr*r
@@ -60,7 +60,7 @@ rank_controllability = rank(controllability);
 
 % **LQR ile Optimal Kontrol Kazancı K Matrisi**
 Q = diag([100,1,1,1,1,1,1,1,1]);
-R = diag([0.1,1,1,1,1,1]);
+R = diag([.1,1,1,1,1,1]);
 K = lqr(A,B,Q,R);
 
 % **Çıkış ve Direkt Geçiş Matrisleri**
@@ -68,7 +68,7 @@ C = eye(9);
 D = zeros(9,6);
 
 % **Başlangıç koşulları**
-x_init = [1; 1; 1; 1; 1; 1; 1; 1; 1];
+x_init = [1; 1; 1; 0; 0; 0; 0; 0; 0];
 t = 0:0.01:10;
 
 % **Kapalı çevrim sistem matrisi**
