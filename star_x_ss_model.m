@@ -61,8 +61,8 @@ controllability = ctrb(A, B);
 rank_controllability = rank(controllability);
 
 % **LQR ile Optimal Kontrol Kazancı K Matrisi**
-Q = diag([1,1,1,1,1,1,1,1,1]);
-R = diag([1,1,1,1,1,1]);
+Q = diag([100,1,1,1,1,1,1,1,1]);
+R = diag([.1,1,1,1,1,1]);
 K = lqr(A,B,Q,R);
 
 % **Çıkış ve Direkt Geçiş Matrisleri**
